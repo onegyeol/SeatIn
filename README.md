@@ -8,3 +8,9 @@
     <img src="https://skillicons.dev/icons?i=git,nextjs,django,postgres,aws,docker,selenium,blender,threejs" />
   </a>
 </p>
+
+## 프로토타입
+<img width="1207" height="345" alt="스크린샷 2025-10-12 오후 5 33 54" src="https://github.com/user-attachments/assets/822b3a6c-6881-4fca-a7a6-b8122c13a81a" />
+<img width="1206" height="351" alt="스크린샷 2025-10-12 오후 5 33 59" src="https://github.com/user-attachments/assets/638c1944-1996-4036-b567-2fec023fa295" />
+<img width="1202" height="348" alt="스크린샷 2025-10-12 오후 5 34 04" src="https://github.com/user-attachments/assets/6529874b-23f8-46ce-986e-45b8229c9327" />
+<img width="1284" height="524" alt="스크린샷 2025-10-12 오후 5 35 05" src="https://github.com/user-attachments/assets/3f29a131-f59f-4073-ba2d-3d5649351553" />
