@@ -1,8 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from members.models import Member
+from users.models import Member
 from match.models import Match
-
 
 class Payment(models.Model):
     PAYMENT_METHOD_CHOICES = [
@@ -20,7 +19,7 @@ class Payment(models.Model):
         ("refunded", "환불완료"),
     ]
 
-   id = models.BigAutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     member = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True, related_name="payments")
     match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name="payments")  # 경기 정보 연결
 

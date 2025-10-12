@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/router";
 import styles from "../styles/Login.module.css";
 import Head from "next/head";
+import { AuthContext } from "./_app";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [animate, setAnimate] = useState(false);
+  const { setIsLoggedIn } = useContext(AuthContext);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -27,7 +29,7 @@ export default function LoginPage() {
       if (res.ok) {
         localStorage.setItem("access", data.access);
         localStorage.setItem("refresh", data.refresh);
-        alert("로그인 성공!");
+        setIsLoggedIn(true);
         router.push("/");
       } else {
         if (data.detail === "이메일 인증을 완료해야 로그인할 수 있습니다.") {

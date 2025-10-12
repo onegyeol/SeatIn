@@ -4,6 +4,8 @@ import os
 from dotenv import load_dotenv
 from datetime import timedelta
 
+load_dotenv() 
+
 TOSS_CLIENT_KEY = os.getenv("TOSS_CLIENT_KEY")
 TOSS_SECRET_KEY = os.getenv("TOSS_SECRET_KEY")
 
@@ -44,7 +46,8 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",
     "users",
     "home",
-    "match"
+    "match",
+    "payments",
 ]
 
 SITE_ID = 1
@@ -91,8 +94,6 @@ REST_FRAMEWORK = {
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-load_dotenv() 
 
 DATABASES = {
     'default': {
@@ -195,20 +196,24 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # 소셜 로그인 설정
+NAVER_CLIENT_ID = config("NAVER_CLIENT_ID")
+NAVER_CLIENT_SECRET = config("NAVER_CLIENT_SECRET")
+GOOGLE_CLIENT_ID = config("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = config("GOOGLE_CLIENT_SECRET")
+
 SOCIALACCOUNT_PROVIDERS = {
     "naver": {
         "APP": {
-            "client_id": config("NAVER_CLIENT_ID"),
-            "secret": config("NAVER_CLIENT_SECRET"),
+            "client_id": NAVER_CLIENT_ID,
+            "secret": NAVER_CLIENT_SECRET,
             "key": "",
         }
     },
     "google": {
         "APP": {
-            "client_id": config("GOOGLE_CLIENT_ID"),
-            "secret": config("GOOGLE_CLIENT_SECRET"),
+            "client_id": GOOGLE_CLIENT_ID,
+            "secret": GOOGLE_CLIENT_SECRET,
             "key": "",
         }
     },
 }
-

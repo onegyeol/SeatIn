@@ -13,6 +13,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.urls import reverse
 from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import redirect
 from .serializers import CustomRegisterSerializer
 from .tokens import account_activation_token
 import requests
@@ -21,7 +22,7 @@ import requests
 User = get_user_model()
 
 
-# ✅ 이메일 전송 함수
+# 이메일 전송 함수
 def send_activation_email(user, request):
     token = account_activation_token.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -46,7 +47,7 @@ def send_activation_email(user, request):
     email.send()
 
 
-# ✅ 회원가입 API
+# 회원가입 API
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def signup(request):
@@ -65,7 +66,7 @@ def signup(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# ✅ 이메일 인증 API
+# 이메일 인증 API
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def activate(request, uidb64, token):
@@ -82,8 +83,7 @@ def activate(request, uidb64, token):
     else:
         return Response({"error": "토큰이 유효하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
-
-# ✅ 로그인 (이메일 인증 여부 확인)
+# 로그인 (이메일 인증 여부 확인)
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs) # JWT 토큰 발급
@@ -96,7 +96,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 
-# ✅ 네이버 로그인 콜백
+# 네이버 로그인 콜백
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def naver_callback(request):
@@ -118,20 +118,44 @@ def naver_callback(request):
     try:
         token_res = requests.get(token_url, params=params).json()
         access_token = token_res.get("access_token")
+
         if not access_token:
             return Response({"error": "Failed to get access token"}, status=status.HTTP_400_BAD_REQUEST)
 
+        # 사용자 프로필 가져오기
         profile_res = requests.get(
             "https://openapi.naver.com/v1/nid/me",
             headers={"Authorization": f"Bearer {access_token}"}
         ).json()
 
-        return Response(profile_res)
+        profile = profile_res.get("response")
+        email = profile.get("email")
+        name = profile.get("name", "")
+        mobile = profile.get("mobile", "").replace("-", "") if profile.get("mobile") else None
+
+        # 회원 생성 or 가져오기
+        user, created = User.objects.get_or_create(
+            email=email,
+            defaults={
+                "username": name or email.split("@")[0],
+                "phone": mobile,
+                "is_active": True,
+            }
+        )
+
+        # JWT 토큰 발급
+        refresh = RefreshToken.for_user(user)
+        access = str(refresh.access_token)
+        refresh_token = str(refresh)
+
+        redirect_url = f"http://localhost:3000/auth/callback?access={access}&refresh={refresh_token}"
+        return redirect(redirect_url)
+
     except requests.exceptions.RequestException as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# ✅ 구글 로그인 콜백
+# 구글 로그인 콜백
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def google_callback(request):
@@ -149,16 +173,41 @@ def google_callback(request):
     }
 
     try:
+        # 토큰 요청
         token_res = requests.post(token_url, data=data).json()
         access_token = token_res.get("access_token")
         if not access_token:
             return Response({"error": "Failed to get access token"}, status=status.HTTP_400_BAD_REQUEST)
 
+        # 사용자 프로필 요청
         profile_res = requests.get(
             "https://www.googleapis.com/oauth2/v2/userinfo",
             headers={"Authorization": f"Bearer {access_token}"}
         ).json()
 
-        return Response(profile_res)
+        email = profile_res.get("email")
+        name = profile_res.get("name", "")
+        picture = profile_res.get("picture", "")
+
+        if not email:
+            return Response({"error": "Email not found in profile"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 사용자 생성 or 가져오기
+        user, created = User.objects.get_or_create(
+            email=email,
+            defaults={
+                "username": name or email.split("@")[0],
+                "is_active": True,
+            }
+        )
+
+        # JWT 토큰 발급
+        refresh = RefreshToken.for_user(user)
+        access = str(refresh.access_token)
+        refresh_token = str(refresh)
+
+        redirect_url = f"http://localhost:3000/auth/callback?access={access}&refresh={refresh_token}"
+        return redirect(redirect_url)
+
     except requests.exceptions.RequestException as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

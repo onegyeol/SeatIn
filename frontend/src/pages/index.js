@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { useRouter } from "next/router"
 import { Canvas, useThree } from "@react-three/fiber"
 import { OrbitControls, useGLTF } from "@react-three/drei"
 import { gsap } from "gsap"
 import MenuBar from "../components/MenuBar"
+import Head from "next/head";
+import { AuthContext } from "./_app";
 
 function StadiumModel() {
   const { scene } = useGLTF("/models/stadium.glb")
@@ -34,39 +36,41 @@ function CameraAnimation({ onZoomEnd }) {
 export default function Start() {
   const [menuVisible, setMenuVisible] = useState(false)
   const router = useRouter()
+  const { setIsLoggedIn } = useContext(AuthContext);
 
-  // 네이버/구글 로그인 후 돌아왔을 때 토큰 저장
   useEffect(() => {
-    const { access, refresh } = router.query
-    if (access && refresh) {
-      localStorage.setItem("access", access)
-      localStorage.setItem("refresh", refresh)
-      router.replace("/") // 쿼리 제거 후 현재 페이지 리로드
-    }
-  }, [router.query])
+    const token = localStorage.getItem("access");
+    if (token) setIsLoggedIn(true);
+  }, [setIsLoggedIn]);
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        overflow: "hidden",
-        position: "fixed",
-        background: "#F1FFFFFF",
-      }}
-    >
-      <Canvas
-        style={{ width: "100%", height: "100%" }}
-        camera={{ position: [-20, 150, 150], fov: 50 }}
+    <>
+    <Head>
+        <title>SeatIn</title>
+      </Head>
+      <div
+        style={{
+          width: "100vw",
+          height: "100vh",
+          overflow: "hidden",
+          position: "fixed",
+          background: "#F1FFFFFF",
+        }}
       >
-        <ambientLight intensity={3} />
-        <directionalLight position={[100, 100, 120]} />
-        <StadiumModel />
-        <CameraAnimation onZoomEnd={() => setMenuVisible(true)} />
-        <OrbitControls enableRotate={false} enablePan={false} enableZoom={false} />
-      </Canvas>
+        <Canvas
+          style={{ width: "100%", height: "100%" }}
+          camera={{ position: [-20, 150, 150], fov: 50 }}
+        >
+          <ambientLight intensity={3} />
+          <directionalLight position={[100, 100, 120]} />
+          <StadiumModel />
+          <CameraAnimation onZoomEnd={() => setMenuVisible(true)} />
+          <OrbitControls enableRotate={false} enablePan={false} enableZoom={false} />
+        </Canvas>
 
-      <MenuBar visible={menuVisible} />
-    </div>
+        <MenuBar visible={menuVisible} />
+      </div>
+    </>
+
   )
 }

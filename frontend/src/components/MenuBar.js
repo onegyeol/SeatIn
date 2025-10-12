@@ -19,6 +19,7 @@ export default function MenuBar({ visible }) {
   const handleLogout = () => {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
+    setIsLoggedIn(true);
     setIsLoggedIn(false);
     router.push("/");
 
