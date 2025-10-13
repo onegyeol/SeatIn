@@ -6,7 +6,7 @@ const logoStyle = {
   fontSize: "2.3rem",
   fontWeight: "900",
   color: "#1e40af", 
-  fontFamily: "sans-serif",
+  fontFamily: "Giants-Bold",
 };
 
 const spanStyle = {

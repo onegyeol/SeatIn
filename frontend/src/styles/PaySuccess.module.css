@@ -1,0 +1,78 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9fafc;
+  font-family: "Pretendard", sans-serif;
+}
+
+.card {
+  background: white;
+  padding: 40px 50px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  width: 600px;
+  text-align: center;
+}
+
+.icon {
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  color: #1b1b1b;
+}
+
+.infoBox {
+  margin-bottom: 70px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.homeButton {
+  background-color: #1b64da;
+  color: white;
+  font-size: 14px;
+  padding: 13px 25px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.homeButton:hover {
+  background-color: #1552b6;
+}
+
+.confirmButton {
+  background-color: #f1f3f5;
+  color: #1b64da;
+  font-size: 14px;
+  padding: 13px 25px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.confirmButton:hover {
+  background-color: #dae0e6;
+}

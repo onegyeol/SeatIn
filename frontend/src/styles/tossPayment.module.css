@@ -1,0 +1,128 @@
+.w100 {
+  width: 100%;
+}
+
+.h100 {
+  height: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  overflow: auto;
+}
+
+.container {
+  max-width: 540px;
+  width: 100%;
+}
+
+.btnWrapper {
+  padding: 0 24px;
+}
+
+.btn {
+  padding: 11px 22px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f2f4f6;
+  color: #4e5968;
+  font-weight: 600;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.primaryBtn {
+  composes: btn;
+  width: 100%;
+  background-color: #3282f6;
+  color: #f9fcff;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+.justifyBetween {
+  justify-content: space-between;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.confirmLoading {
+  margin-top: 72px;
+  height: 400px;
+  justify-content: space-between;
+}
+
+.confirmSuccess {
+  display: none;
+  margin-top: 72px;
+}
+
+.buttonGroup {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+
+.title {
+  margin-top: 32px;
+  margin-bottom: 0;
+  color: #191f28;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.description {
+  margin-top: 8px;
+  color: #4e5968;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.responseSection {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 20px;
+}
+
+.responseLabel {
+  font-weight: 600;
+  color: #333d48;
+  font-size: 17px;
+}
+
+.responseText {
+  font-weight: 500;
+  color: #4e5968;
+  font-size: 17px;
+  padding-left: 16px;
+  word-break: break-word;
+  text-align: right;
+}
+
+.colorGrey {
+  color: #b0b8c1;
+}

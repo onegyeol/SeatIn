@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
+from dj_rest_auth.registration.views import RegisterView
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.conf import settings
@@ -13,30 +14,37 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.urls import reverse
 from django.core.mail import EmailMultiAlternatives
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from .serializers import CustomRegisterSerializer
 from .tokens import account_activation_token
 import requests
 
-
 User = get_user_model()
-
 
 # 이메일 전송 함수
 def send_activation_email(user, request):
     token = account_activation_token.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
+
     domain = "localhost:8000"
 
     activate_url = f"http://{domain}{reverse('account_activate', kwargs={'uidb64': uid, 'token': token})}"
 
     mail_subject = "[SeatIn] 이메일 인증을 완료해주세요"
-    html_message = render_to_string("email/email_verification.html", {
-        "user": user,
-        "activate_url": activate_url,
-    })
+
+    # HTML 템플릿 렌더링
+    html_message = render_to_string(
+        "email/email_verification.html",
+        {
+            "user": user,
+            "activate_url": activate_url,
+        },
+    )
+
+    # 텍스트 버전 (HTML 제거)
     plain_message = strip_tags(html_message)
 
+    # 이메일 생성 (멀티파트)
     email = EmailMultiAlternatives(
         subject=mail_subject,
         body=plain_message,
@@ -44,6 +52,7 @@ def send_activation_email(user, request):
         to=[user.email],
     )
     email.attach_alternative(html_message, "text/html")
+
     email.send()
 
 
@@ -67,34 +76,66 @@ def signup(request):
 
 
 # 이메일 인증 API
-@api_view(['GET'])
-@permission_classes([AllowAny])
 def activate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        return Response({"error": "Invalid user or token"}, status=status.HTTP_400_BAD_REQUEST)
+        user = get_user_model().objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
+        return JsonResponse({"error": "Invalid user or token"}, status=400)
 
     if account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        return Response({"message": "이메일 인증이 완료되었습니다."}, status=status.HTTP_200_OK)
-    else:
-        return Response({"error": "토큰이 유효하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
-# 로그인 (이메일 인증 여부 확인)
+        # 이메일 인증 후 JWT 자동 발급
+        refresh = RefreshToken.for_user(user)
+        return render(request, "email/email_verification_success.html", {
+            "user": user,
+        })
+    else:
+        return render(request, "email/email_verification_failed.html", status=400)
+
+class CustomRegisterView(RegisterView):
+    serializer_class = CustomRegisterSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save(self.request)
+        user.is_active = False  # 이메일 인증 전 비활성화
+        user.save()
+        send_activation_email(user, self.request)
+        return user
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = self.perform_create(serializer)
+
+        if not serializer.is_valid():
+            print("Validation Error:", serializer.errors)  
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            "message": "회원가입이 완료되었습니다. 이메일 인증 후 로그인해주세요.",
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+        }, status=status.HTTP_201_CREATED)
+        
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        data = super().validate(attrs) # JWT 토큰 발급
+        data = super().validate(attrs)
+
         if not self.user.is_active:
-            raise serializers.ValidationError({"detail": "이메일 인증을 완료해야 로그인할 수 있습니다."})
+            raise serializers.ValidationError(
+                {"detail": "이메일 인증을 완료해야 로그인할 수 있습니다."}
+            )
+
         return data
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
-
 
 # 네이버 로그인 콜백
 @api_view(['GET'])

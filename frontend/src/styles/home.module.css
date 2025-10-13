@@ -34,10 +34,10 @@
 }
 
 .search-bar input {
+  font-family: "NanumSquareNeo";
   width: 100%;
   border: none;
   outline: none;
-  font-size: 15px;
 }
 
 .icon {
@@ -47,6 +47,7 @@
 }
 
 .nav-links {
+  font-family: "NanumSquareNeo";
   display: flex;
   gap: 24px;
   font-size: 15px;
@@ -97,8 +98,9 @@
 }
 
 .category-btn {
+  font-family: "NanumSquareNeo";
   padding: 7px 20px;
-  font-size: 15px; 
+  font-size: 13px; 
   border-radius: 9999px;
   border: 1px solid #d1d5db;
   background-color: white;
@@ -119,10 +121,11 @@
 .match-list {
   background-color: #f3f4f6;
   min-height: 50vh;
-  padding: 100px;
+  padding: 40px 100px;
 }
 
 .match-list h1 {
+  font-family: "Giants-Bold";
   font-size: 28px;
   font-weight: bold;
   text-align: center;
@@ -183,17 +186,19 @@
 }
 
 .vs-text {
-  font-weight: 700;
+  font-family: "NanumSquareNeo-Bold";
   font-size: 18px;
   color: #222;
 }
 
 
 .info {
+  font-family: "NanumSquareNeo";
+  font-size: 14px;
   text-align: center;
 }
 .title {
-  font-weight: 600;
+  font-family: "NanumSquareNeo-Bold";
   margin-bottom: 4px;
 }
 
@@ -211,7 +216,7 @@
   border-radius: 6px;
   padding: 6px 12px;
   cursor: pointer;
-  font-family: "Pretendard", sans-serif;
+  font-family: "NanumSquareNeo";
   font-size: 15px;
   transition: all 0.2s;
 }

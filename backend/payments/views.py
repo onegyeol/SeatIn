@@ -3,14 +3,15 @@ import requests
 import base64
 import json
 from django.utils import timezone
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from .models import Payment
 from match.models import Match
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def confirm_payment(request):
     try:
         data = json.loads(request.body)

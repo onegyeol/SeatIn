@@ -46,8 +46,9 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",
     "users",
     "home",
-    "match",
+    'match.apps.MatchConfig',
     "payments",
+    "seats",
 ]
 
 SITE_ID = 1

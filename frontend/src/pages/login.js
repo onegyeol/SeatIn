@@ -44,7 +44,7 @@ export default function LoginPage() {
     }
   };
 
-  // ✅ 소셜 로그인 리디렉션 함수
+  // 소셜 로그인 리디렉션 함수
   const handleSocialLogin = (provider) => {
     const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
@@ -73,7 +73,7 @@ export default function LoginPage() {
     }
   };
 
-  // ✅ 회원가입 페이지로 전환
+  // 회원가입 페이지로 전환
   const handleSignupTransition = () => {
     setAnimate(true);
     setTimeout(() => router.push("/signup"), 600);

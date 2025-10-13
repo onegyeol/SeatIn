@@ -1,7 +1,5 @@
 from django.db import models
-from django.utils import timezone
 from users.models import Member
-from match.models import Match
 
 class Payment(models.Model):
     PAYMENT_METHOD_CHOICES = [
@@ -20,15 +18,14 @@ class Payment(models.Model):
     ]
 
     id = models.BigAutoField(primary_key=True)
-    member = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True, related_name="payments")
-    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name="payments")  # 경기 정보 연결
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="payments")
+    match = models.ForeignKey('match.Match', on_delete=models.CASCADE, related_name="payments")  # 경기 정보 연결
 
-    amount = models.PositiveIntegerField()  
-    method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default="toss")
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="ready")
+    amount = models.PositiveIntegerField(null=False)  
+    method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default="toss", null=False)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="ready", null=False)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    approved_at = models.DateTimeField(blank=True, null=True)
+    payment_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"[{self.get_status_display()}] {self.match.title} - {self.amount}원"

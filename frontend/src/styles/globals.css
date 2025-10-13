@@ -6,7 +6,7 @@
 }
 
 @font-face {
-    font-family: "NanumSquareNeo";
+    font-family: "NanumSquareNeo-Bold";
     src: url("/fonts/NanumSquareNeo-cBd.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
@@ -20,7 +20,7 @@
 }
 
 @font-face {
-    font-family: "Giants";
+    font-family: "Giants-Bold";
     src: url("/fonts/Giants-Bold.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
