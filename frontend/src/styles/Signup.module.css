@@ -7,18 +7,10 @@
   box-sizing: border-box;
 }
 
-/* 로고 */
-.logo {
-  margin-left: 5%;
-  font-size: 28px;
-  font-weight: 700;
-  color: white;
+.logo{
+  margin-left: 30px;
+  margin-top: 20px;
 }
-
-.logoHighlight {
-  color: #59CAD2;
-}
-
 .container {
   flex: 1;
   display: flex;
@@ -52,7 +44,7 @@
 }
 
 .loginBtn {
-  background: #59CAD2;
+  background: #283577;
   border: none;
   color: black;
   padding: 10px 20px;
@@ -62,17 +54,18 @@
   display: inline-block;
   width: auto;
   align-self: center;
+  opacity: 0.8;
 }
 
 .loginBtn:hover {
-  background: linear-gradient(90deg, #59CAD2, #59CAD2);
+  background: linear-gradient(90deg, #283577, #283577);
   transform: scale(1.05);
 }
 
 /* 우측 */
 .right {
   flex: 1;
-  background: #59CAD2;
+  background: #283577;
   padding: 40px;
   display: flex;
   flex-direction: column;
@@ -108,7 +101,7 @@
 }
 
 .signupBtn:hover {
-  background: linear-gradient(90deg, #333, #333);
+  background: linear-gradient(90deg, #504747, #333);
   transform: scale(1.05);
 }
 

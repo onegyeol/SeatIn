@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import styles from "../styles/Login.module.css";
 import Head from "next/head";
 import { AuthContext } from "./_app";
+import Logo from "../components/Logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -55,9 +56,9 @@ export default function LoginPage() {
       const scope =
         "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
 
-        const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(
-          REDIRECT_URI
-        )}&response_type=code`;
+      const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+        REDIRECT_URI
+      )}&response_type=code`;
 
       window.location.href = kakaoAuthURL;
     }
@@ -99,9 +100,9 @@ export default function LoginPage() {
       </Head>
 
       <div className={styles.loginpage}>
-        <h1 className={styles.logo} style={{ fontFamily: "Giants, sans-serif" }}>
-          Seat<span className={styles.logoHighlight}>In</span>
-        </h1>
+        <div className={styles.logo}>
+          <Logo />
+        </div>
 
         <div className={styles.container}>
           <div
@@ -116,7 +117,7 @@ export default function LoginPage() {
               </h2>
 
               <div className={styles.socials}>
-              <img
+                <img
                   src="/kakao.png"
                   alt="kakao"
                   onClick={() => handleSocialLogin("kakao")}

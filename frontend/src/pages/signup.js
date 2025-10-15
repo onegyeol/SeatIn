@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/router";
 import styles from '../styles/Signup.module.css';
 import Link from "next/link";
 import Head from "next/head";
+import Logo from "../components/Logo";
 
 export default function SignupPage() {
-  const router = useRouter(); 
+  const router = useRouter();
 
   const [form, setForm] = useState({
     name: "",
@@ -83,10 +84,9 @@ export default function SignupPage() {
       </Head>
 
       <div className={styles.signuppage}>
-        {/* 로고 */}
-        <h1 className={styles.logo} style={{ fontFamily: "Giants, sans-serif" }}>
-          Seat<span className={styles.logoHighlight}>In</span>
-        </h1>
+        <div className={styles.logo}>
+          <Logo />
+        </div>
 
         <div className={styles.container}>
           <div className={styles.box}>

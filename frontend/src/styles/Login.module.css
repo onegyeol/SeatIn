@@ -6,16 +6,9 @@
   padding: 20px; /* 화면 가장자리 여백 */
   box-sizing: border-box;
 }
-
-.logo {
-  margin-left: 5%;
-  font-size: 28px;
-  font-weight: 700;
-  color: white;
-}
-
-.logoHighlight {
-  color: #59CAD2;
+.logo{
+  margin-left: 30px;
+  margin-top: 20px;
 }
 
 .container {
@@ -37,7 +30,7 @@
 /* 좌측 */
 .loginLeft {
   flex: 1;
-  background: #59CAD2;
+  background: #283577;
   /* 민트색 */
   padding: 40px;
   display: flex;
@@ -107,21 +100,21 @@
 }
 
 .signupBtn {
-  background: #59CAD2;
+  background: #283577;
   border: none;
   color: black;
   padding: 10px 20px;
   border-radius: 20px;
   cursor: pointer;
   margin-top: 20px;
-
+  opacity: 0.8;
   display: inline-block;
   width: auto;
-  align-self: center;   /* ← 버튼을 가운데 맞추면서 가로 auto 유지 */
+  align-self: center;
 }
 
 .signupBtn:hover {
-  background: linear-gradient(90deg, #00bcd4, #00bcd4);
+  background: linear-gradient(90deg, #283577, #283577);
   transform: scale(1.05);
 }
 
