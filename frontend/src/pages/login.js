@@ -48,6 +48,19 @@ export default function LoginPage() {
   const handleSocialLogin = (provider) => {
     const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
+    const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+
+    if (provider === "kakao") {
+      const REDIRECT_URI = "http://localhost:8000/api/users/kakao/callback/";
+      const scope =
+        "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+
+        const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+          REDIRECT_URI
+        )}&response_type=code`;
+
+      window.location.href = kakaoAuthURL;
+    }
 
     if (provider === "google") {
       const REDIRECT_URI = "http://localhost:8000/api/users/google/callback/";
@@ -103,7 +116,12 @@ export default function LoginPage() {
               </h2>
 
               <div className={styles.socials}>
-                <img src="/kakao.png" alt="kakao" />
+              <img
+                  src="/kakao.png"
+                  alt="kakao"
+                  onClick={() => handleSocialLogin("kakao")}
+                  style={{ cursor: "pointer" }}
+                />
                 <img
                   src="/google.png"
                   alt="google"

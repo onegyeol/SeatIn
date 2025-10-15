@@ -201,6 +201,8 @@ NAVER_CLIENT_ID = config("NAVER_CLIENT_ID")
 NAVER_CLIENT_SECRET = config("NAVER_CLIENT_SECRET")
 GOOGLE_CLIENT_ID = config("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = config("GOOGLE_CLIENT_SECRET")
+KAKAO_CLIENT_ID = config("KAKAO_CLIENT_ID")
+KAKAO_CLIENT_SECRET = config("KAKAO_CLIENT_SECRET")
 
 SOCIALACCOUNT_PROVIDERS = {
     "naver": {
@@ -214,6 +216,13 @@ SOCIALACCOUNT_PROVIDERS = {
         "APP": {
             "client_id": GOOGLE_CLIENT_ID,
             "secret": GOOGLE_CLIENT_SECRET,
+            "key": "",
+        }
+    },
+    "kakao": {
+        "APP": {
+            "client_id": KAKAO_CLIENT_ID,
+            "secret": KAKAO_CLIENT_SECRET,
             "key": "",
         }
     },

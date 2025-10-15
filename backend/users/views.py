@@ -252,3 +252,76 @@ def google_callback(request):
 
     except requests.exceptions.RequestException as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# 카카오 로그인 콜백
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def kakao_callback(request):
+    print("KAKAO_CLIENT_ID =", settings.KAKAO_CLIENT_ID)
+    print("KAKAO_CLIENT_SECRET =", settings.KAKAO_CLIENT_SECRET)
+    code = request.GET.get("code")
+    if not code:
+        return Response({"error": "Missing code"}, status=status.HTTP_400_BAD_REQUEST)
+
+    token_url = "https://kauth.kakao.com/oauth/token"
+    data = {
+        "grant_type": "authorization_code",
+        "client_id": settings.KAKAO_CLIENT_ID,  
+        "redirect_uri": "http://localhost:8000/api/users/kakao/callback/",
+        "code": code,
+        "client_secret": getattr(settings, "KAKAO_CLIENT_SECRET", None),
+    }
+
+    try:
+        # 액세스 토큰 요청
+        token_res = requests.post(token_url, data=data).json()
+        access_token = token_res.get("access_token")
+
+        if not access_token:
+            return Response(
+                {"error": "Failed to get access token"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # 사용자 정보 요청
+        profile_url = "https://kapi.kakao.com/v2/user/me"
+        headers = {"Authorization": f"Bearer {access_token}"}
+        profile_res = requests.get(profile_url, headers=headers).json()
+
+        kakao_account = profile_res.get("kakao_account", {})
+        email = kakao_account.get("email")
+        profile = kakao_account.get("profile", {})
+        nickname = profile.get("nickname", "")
+        profile_image = profile.get("profile_image_url", "")
+
+        # 전화번호는 비워둠 
+        phone_number = None
+
+        if not email:
+            return Response(
+                {"error": "Email not found in profile"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # 사용자 생성 또는 기존 사용자 조회
+        user, created = User.objects.get_or_create(
+            email=email,
+            defaults={
+                "username": nickname or email.split("@")[0],
+                "is_active": True,
+            },
+        )
+
+        # JWT 발급
+        refresh = RefreshToken.for_user(user)
+        access = str(refresh.access_token)
+        refresh_token = str(refresh)
+
+        # 프론트엔드로 리다이렉트
+        redirect_url = (
+            f"http://localhost:3000/auth/callback?access={access}&refresh={refresh_token}"
+        )
+        return redirect(redirect_url)
+
+    except requests.exceptions.RequestException as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

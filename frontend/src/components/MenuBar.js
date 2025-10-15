@@ -19,7 +19,6 @@ export default function MenuBar({ visible }) {
   const handleLogout = () => {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
-    setIsLoggedIn(true);
     setIsLoggedIn(false);
     router.push("/");
 
@@ -88,7 +87,7 @@ export default function MenuBar({ visible }) {
           </li>
 
           {!isLoggedIn ? (
-            // ✅ 로그인 안 했을 때
+            // 로그인 안 했을 때
             <li style={{ margin: "7vh 0" }}>
               <Link
                 href="/login"
@@ -97,11 +96,11 @@ export default function MenuBar({ visible }) {
               </Link>
             </li>
           ) : (
-            // ✅ 로그인 했을 때
+            // 로그인 했을 때
             <>
               <li style={{ margin: "7vh 0" }}>
                 <Link
-                  href="/mypage"
+                  href="/mypage/pay"
                   style={{ color: "inherit", textDecoration: "none", fontFamily: "NanumSquareNeo"}}>
                   마이페이지
                 </Link>

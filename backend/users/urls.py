@@ -16,4 +16,5 @@ urlpatterns = [
     # 소셜 로그인 콜백
     path("naver/callback/", views.naver_callback, name="naver_callback"),
     path("google/callback/", views.google_callback, name="google_callback"),
+    path("kakao/callback/", views.kakao_callback, name="kakao_callback"),
 ]

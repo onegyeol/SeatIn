@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import styles from "../styles/home.module.css";
-import Logo from "../components/Logo";
+import Navbar from "../components/Navbar";  
 
 const banners = ["/images/banner1.png", "/images/banner2.png", "/images/banner3.png"];
 const categories = ["전체", "K리그", "KBO", "KBL", "프리미어리그"];
@@ -41,20 +41,7 @@ export default function HomePage() {
   return (
     <main className={styles["home-container"]}>
       {/* 상단 네비게이션 */}
-      <header className={styles.navbar}>
-        <Logo />
-
-        <div className={styles["search-bar"]}>
-          <input type="text" placeholder="공연, 경기, 지역 검색" />
-          <Search className={styles.icon} />
-        </div>
-
-        <nav className={styles["nav-links"]}>
-          <Link href="/login">로그인</Link>
-          <Link href="/signup">회원가입</Link>
-          <Link href="/help">고객센터</Link>
-        </nav>
-      </header>
+      <Navbar />
 
       {/* 배너 */}
       <section className={styles["banner-section"]}>
