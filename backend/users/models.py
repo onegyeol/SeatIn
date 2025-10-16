@@ -20,14 +20,14 @@ class MemberManager(BaseUserManager):
 
 class Member(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    username = models.CharField(max_length=50, blank=True, null=True)
+    username = models.CharField(max_length=50, blank=True, null=True, unique=False)
     phone = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=False)  # 이메일 인증 후 활성화 여부
 
     objects = MemberManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return f"{self.username} ({self.email})"

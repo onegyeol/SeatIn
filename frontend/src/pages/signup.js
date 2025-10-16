@@ -7,6 +7,8 @@ import Logo from "../components/Logo";
 
 export default function SignupPage() {
   const router = useRouter();
+  const [modalMessage, setModalMessage] = useState({ title: "", subtitle: "" })
+  const [showModal, setShowModal] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -55,24 +57,44 @@ export default function SignupPage() {
 
         if (res.ok) {
           console.log("✅ 회원가입 성공!");
-          alert("회원가입이 완료되었습니다!");
-          router.push("/check-email");
+          setModalMessage({
+            title: "회원가입이 완료되었습니다!",
+            subtitle: "이메일 인증을 진행해주세요.",
+          });
+          setShowModal(true);
+          setTimeout(() => router.push("/check-email"), 2000);
         } else {
           const text = await res.text();
           console.error("❌ Raw error:", text);
 
           try {
             const data = JSON.parse(text);
-            console.error("Parsed error:", data);
+            if (data.email && data.email[0].includes("이미 가입된")) {
+              setModalMessage({
+                title: "이미 가입된 이메일입니다.",
+                subtitle: "한번 더 확인 부탁드립니다.",
+              });
+            } else {
+              setModalMessage({
+                title: "회원가입에 실패했습니다.",
+                subtitle: "입력 정보를 확인하세요.",
+              });
+            }
           } catch {
-            console.error("응답이 JSON이 아닙니다:", text);
+            setModalMessage({
+              title: "회원가입 중 오류가 발생했습니다.",
+              subtitle: "",
+            });
           }
-
-          alert("회원가입에 실패했습니다. 입력 정보를 확인하세요.");
+          setShowModal(true);
         }
       } catch (err) {
         console.error("서버 요청 오류:", err);
-        alert("서버와의 연결에 문제가 발생했습니다.");
+        setModalMessage({
+          title: "서버와의 연결에 문제가 발생했습니다.",
+          subtitle: "",
+        });
+        setShowModal(true);
       }
     }
   };
@@ -188,6 +210,24 @@ export default function SignupPage() {
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3 className={styles.modalTitle}>{modalMessage.title}</h3>
+            {modalMessage.subtitle && (
+              <p className={styles.modalSubtitle}>{modalMessage.subtitle}</p>
+            )}
+            <button
+              onClick={() => setShowModal(false)}
+              className={styles.modalButton}
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
+
     </>
   );
 }

@@ -6,6 +6,9 @@ from datetime import timedelta
 
 load_dotenv() 
 
+ACCOUNT_UNIQUE_USERNAME = False
+ACCOUNT_USERNAME_REQUIRED = False
+
 TOSS_CLIENT_KEY = os.getenv("TOSS_CLIENT_KEY")
 TOSS_SECRET_KEY = os.getenv("TOSS_SECRET_KEY")
 

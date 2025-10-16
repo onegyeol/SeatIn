@@ -11,10 +11,13 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [animate, setAnimate] = useState(false);
   const { setIsLoggedIn } = useContext(AuthContext);
+  const [modalMessage, setModalMessage] = useState(""); 
+  const [showModal, setShowModal] = useState(false); 
 
   const handleLogin = async () => {
     if (!email || !password) {
-      alert("이메일과 비밀번호를 입력해주세요.");
+      setModalMessage("이메일과 비밀번호를 입력해주세요.");
+      setShowModal(true);
       return;
     }
 
@@ -34,14 +37,16 @@ export default function LoginPage() {
         router.push("/");
       } else {
         if (data.detail === "이메일 인증을 완료해야 로그인할 수 있습니다.") {
-          alert("이메일 인증을 먼저 완료해주세요!");
+          setModalMessage("이메일 인증을 먼저 완료해주세요!");
         } else {
-          alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+          setModalMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
+        setShowModal(true);
       }
     } catch (err) {
       console.error("서버 오류:", err);
-      alert("서버 연결에 문제가 발생했습니다.");
+      setModalMessage("서버 연결에 문제가 발생했습니다.");
+      setShowModal(true);
     }
   };
 
@@ -192,6 +197,18 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+          <h3>{modalMessage}</h3>
+            <button onClick={() => setShowModal(false)} className={styles.modalButton}>
+              확인
+            </button>
+          </div>
+        </div>
+      )}
+
     </>
   );
 }
