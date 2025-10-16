@@ -5,7 +5,7 @@
 ## 기술 스택
 <p>
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=git,nextjs,django,postgres,aws,docker,selenium,blender,threejs" />
+    <img src="https://skillicons.dev/icons?i=git,nextjs,django,postgres,aws,selenium,blender,threejs" />
   </a>
 </p>
 
