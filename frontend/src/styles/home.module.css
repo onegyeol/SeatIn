@@ -206,27 +206,28 @@
 .pagination {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 10px;
-  margin-top: 60px;
+  margin: 60px;
 }
 
-.page-btn {
-  background-color: white;
-  border: 1px solid #d1d5db;
+.pageBtn {
+  border: 1px solid #1e40af;
   border-radius: 6px;
   padding: 6px 12px;
+  background-color: white;
+  color: #1e40af;
   cursor: pointer;
   font-family: "NanumSquareNeo";
   font-size: 15px;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
-.page-btn:hover {
+.pageBtn:hover {
   background-color: #e5e7eb;
 }
 
-.page-btn.active {
+.pageBtnActive {
   background-color: #1e40af;
   color: white;
-  border-color: #1e40af;
 }

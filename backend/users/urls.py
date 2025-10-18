@@ -17,4 +17,15 @@ urlpatterns = [
     path("naver/callback/", views.naver_callback, name="naver_callback"),
     path("google/callback/", views.google_callback, name="google_callback"),
     path("kakao/callback/", views.kakao_callback, name="kakao_callback"),
+
+    # 마이 페이지
+    path('myPage/', views.my_page, name='my_page'),
+    # 결제 내역
+    path("payments/", views.my_payments, name="my_payments"),
+    # 결제한 경기 정보
+    path("tickets/", views.my_tickets, name="my_tickets"),
+    # 정보 수정
+    path("send-code/", views.send_verification_code),
+    path("verify-code/", views.verify_email_code),
+    path("profile/", views.member_profile, name="member_profile"),
 ]

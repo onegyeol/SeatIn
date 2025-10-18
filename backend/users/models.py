@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-
+from django.conf import settings
 
 class MemberManager(BaseUserManager):
     def create_user(self, email, password=None, username=None, phone=None, **extra_fields):
@@ -31,3 +31,12 @@ class Member(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.username} ({self.email})"
+
+# 로그인 -> 정보 수정 시, 잠시 인증 코드 저장
+class EmailVerification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.code} ({self.created_at.strftime('%Y-%m-%d %H:%M:%S')})"

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <body style="font-family: 'NanumSquareNeo', Arial, sans-serif; text-align: center; padding: 40px; background-color: #f9f9f9;">
+    <div style="background: #fff; padding: 40px 30px; border-radius: 10px; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      <h2 style="color: #283577; margin-bottom: 10px;">SeatIn 이메일 인증코드</h2>
+      <p style="color: #333; font-size: 15px; margin-bottom: 25px;">{{ user_name }}님, 아래 인증코드를 입력해주세요.</p>
+
+      <div style="font-size: 30px; letter-spacing: 6px; color: #283577; font-weight: bold; background: #f3f4f6; 
+                  padding: 14px 24px; border-radius: 8px; display: inline-block;">
+        {{ verification_code }}
+      </div>
+
+      <p style="color: #777; font-size: 14px; margin-top: 30px;">이 코드는 발송 후 10분 동안만 유효합니다.</p>
+
+      <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;" />
+
+      <p style="color: #555; font-size: 13px;">감사합니다.<br><b>SeatIn 팀</b> 드림</p>
+    </div>
+  </body>
+</html>

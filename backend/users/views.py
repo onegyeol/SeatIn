@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from django.contrib.auth.decorators import login_required
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -13,11 +14,15 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.urls import reverse
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.shortcuts import redirect, render
 from .serializers import CustomRegisterSerializer
 from .tokens import account_activation_token
-import requests
+import requests, random
+from .models import EmailVerification
+from payments.models import Payment
+from datetime import timedelta
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -325,3 +330,131 @@ def kakao_callback(request):
 
     except requests.exceptions.RequestException as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@login_required
+def my_page(request):
+    member = request.user  # 현재 로그인한 사용자
+    payments = Payment.objects.select_related('match').filter(member=member)
+
+    return render(request, 'my_page.html', {
+        'member': member,
+        'payments': payments,
+    })
+
+
+# 결제 내역 전송
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_payments(request):
+    member = request.user
+    payments = Payment.objects.select_related('match').filter(member=member)
+
+    data = [
+        {
+            "id": p.id,
+            "amount": p.amount,
+            "method": p.method,
+            "status": p.status,
+            "payment_time": p.payment_time,
+            "match_title": p.match.title,
+            "category": p.match.category,
+            "poster1": p.match.poster1,
+            "poster2": p.match.poster2,
+            "date": p.match.date,
+            "location": p.match.location,
+        }
+        for p in payments
+    ]
+    return Response(data)
+
+# 결제한 경기 정보 전송
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_tickets(request):
+    member = request.user
+    payments = Payment.objects.select_related('match').filter(member=member)
+
+    data = [
+        {
+            "id": p.id,
+            "match_title": p.match.title,
+            "category": p.match.category,
+            "date": p.match.date,
+            "location": p.match.location,
+            "poster1": p.match.poster1,
+            "poster2": p.match.poster2,
+            "amount": p.amount,
+            "method": p.method,
+            "payment_time": p.payment_time,
+        }
+        for p in payments
+    ]
+    return Response(data)
+
+# 정보수정 페이지 접근을 위한 이메일 인증코드 생성 / 전송
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def send_verification_code(request):
+    user = request.user
+    code = str(random.randint(100000, 999999))
+
+    # 이전 코드 모두 삭제 후 새 코드 저장
+    EmailVerification.objects.filter(user=user).delete()
+    EmailVerification.objects.create(user=user, code=code)
+
+    subject = "SeatIn 이메일 인증코드"
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to_email = [user.email]
+
+    html_content = render_to_string(
+        "email/email_infoedit_verification.html",
+        {
+            "user_name": user.name if hasattr(user, "name") else user.username,
+            "verification_code": code,
+        },
+    )
+    text_content = f"SeatIn 인증코드: {code}\n\n10분 이내에 입력해주세요."
+
+    email = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+    email.attach_alternative(html_content, "text/html")
+    email.send(fail_silently=False)
+
+    return Response({"message": f"{user.email}로 인증코드를 전송했습니다."})
+
+
+# 인증코드 확인
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def verify_email_code(request):
+    input_code = request.data.get("code")
+    user = request.user
+
+    try:
+        record = EmailVerification.objects.filter(user=user).latest("created_at")
+    except EmailVerification.DoesNotExist:
+        return Response({"error": "인증코드가 존재하지 않습니다."}, status=400)
+
+    # 10분 이상 지난 인증코드는 만료 처리
+    if timezone.now() - record.created_at > timedelta(minutes=10):
+        record.delete()
+        return Response({"error": "인증코드가 만료되었습니다."}, status=400)
+   
+
+    if record.code == input_code:
+        record.delete()  # 사용 후 바로 삭제 (보안)
+        return Response({"message": "이메일 인증 성공"})
+    else:
+        return Response({"error": "인증코드가 일치하지 않습니다."}, status=400)
+
+# 회원 정보 조회
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def member_profile(request):
+    user = request.user
+    data = {
+        "name": user.username,
+        "email": user.email,
+        "phone": getattr(user, "phone", None),
+        "is_social": user.password == "" or user.password is None  # 소셜 로그인 회원은 비밀번호 없음
+    }
+    return Response(data)

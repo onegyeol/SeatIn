@@ -14,7 +14,7 @@ function CameraController({ targetPosition, orbitRef }) {
 
     camera.position.set(x, y, z);
 
-    orbitRef.current.target.set(40, 0, -40);
+    orbitRef.current.target.set(65, 0, -40);
     orbitRef.current.update();
 
   }, [targetPosition, camera, orbitRef]);

@@ -1,123 +1,123 @@
+html, body {
+  overflow-x: hidden;
+}
+
 .container {
-    font-family: "NanumSquareNeo";
-    background-color: #f9fafb;
-  }
-  
-  .layout {
-    display: flex;
-    min-height: 100vh;
-    padding-top: 120px; /* Navbar 높이 보정 */
-  }
-  
-  .sidebar {
-    position: fixed;
-    top: 150px;
-    left: 100px;
-    z-index: 10;
-  }
-  
-  .main {
-    flex-grow: 1;
-    margin-left: 400px;
-    padding: 0 80px;
-    width: calc(100% - 420px);
-  }
-  
-  .title {
-    position: sticky;
-    top: 120px;
-    background-color: #f9fafb;
-    padding: 20px 0;
-    font-family: "Giants-Bold";
-    font-size: 28px;
-    font-weight: bold;
-    z-index: 5;
-  }
-  
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 한 줄에 2개 */
-    gap: 30px;
-    margin-top: 20px;
-    margin-bottom: 60px;
-  }
-  
-  .card {
-    background-color: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 24px;
-    text-align: center;
-    transition: transform 0.2s ease;
-  }
-  
-  .card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .card img {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-  }
-  
-  .logoRow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-  
-  .matchTitle {
-    font-family: "NanumSquareNeo-Bold";
-    font-size: 17px;
-    margin-bottom: 4px;
-  }
-  
-  .stadium {
-    font-size: 14px;
-    color: #6b7280;
-    margin-bottom: 10px;
-  }
-  
-  .amount {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 6px;
-  }
-  
-  .method {
-    font-size: 13px;
-    color: #9ca3af;
-  }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 60px;
-  }
-  
-  .pageBtn {
-    border: 1px solid #1e40af;
-    border-radius: 6px;
-    padding: 6px 12px;
-    background-color: white;
-    color: #1e40af;
-    cursor: pointer;
-    font-family: "NanumSquareNeo";
-    font-size: 15px;
-    transition: all 0.2s ease;
-  }
-  
-  .pageBtn:hover {
-    background-color: #e5e7eb;
-  }
-  
-  .pageBtnActive {
-    background-color: #1e40af;
-    color: white;
-  }
-  
+  font-family: "NanumSquareNeo";
+}
+
+.layout {
+  display: flex;
+}
+
+.sidebar {
+  top: 0;
+  left: 0;
+  z-index: 1;          
+  margin-top: 30px;   
+  margin-left: 50px; 
+}
+
+.main {
+  flex-grow: 1;
+  padding: 0 80px;
+  width: calc(100% - 420px);
+}
+
+.title {
+  position: sticky;
+  top: 100px;
+  padding: 20px 0;
+  font-family: "Giants-Bold";
+  font-size: 28px;
+  font-weight: bold;
+  z-index: 5;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* 한 줄에 2개 */
+  gap: 30px;
+  margin-top: 20px;
+  margin-bottom: 60px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.matchTitle {
+  font-family: "NanumSquareNeo-Bold";
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.stadium {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+.amount {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.method {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 60px;
+}
+
+.pageBtn {
+  border: 1px solid #1e40af;
+  border-radius: 6px;
+  padding: 6px 12px;
+  background-color: white;
+  color: #1e40af;
+  cursor: pointer;
+  font-family: "NanumSquareNeo";
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.pageBtn:hover {
+  background-color: #e5e7eb;
+}
+
+.pageBtnActive {
+  background-color: #1e40af;
+  color: white;
+}

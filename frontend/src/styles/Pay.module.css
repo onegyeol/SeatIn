@@ -1,42 +1,62 @@
 .page {
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   min-height: 100vh;
-  font-family: "Pretendard", sans-serif;
-  padding: 50px 0;
+  background-color: #f8f9fa;
+  padding: 40px 20px;
 }
 
 .content {
-  width: 900px;
-  margin: 0 auto;
-  padding: 40px 50px;
+  width: 100%;
+  max-width: 700px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  margin-top: 150px;
 }
 
 .matchSection {
   display: flex;
-  gap: 100px;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 30px;
-  margin-bottom: 30px;
+  justify-content: center;
+  align-items: center;
+  margin: 40px;
+  gap: 60px;
 }
 
-.poster {
-  width: 300px;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.match-card {
+  width: 100%;
+  text-align: center;
+}
+
+.match-logos-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.team-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.vs-text {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
 }
 
 .matchInfo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  text-align: center;
 }
 
 .matchTitle {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 26px;
+  font-weight: bold;
   margin-bottom: 10px;
 }
 
@@ -44,52 +64,60 @@
 .matchLocation,
 .matchCategory {
   font-size: 16px;
-  color: #444;
-  margin: 6px 0;
+  color: #555;
+  margin: 4px 0;
 }
 
+/* 결제 섹션 */
 .paymentSection {
-  padding-top: 10px;
-  text-align: center;
+  border-top: 1px solid #eee;
+  padding-top: 30px;
 }
 
-.match-logos-center {
-  display: flex;
-  justify-content: center;  
-  align-items: center;  
-}
 .paymentSection h2 {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.paymentDetail {
+  background: #f4f6fa;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 24px;
 }
 
 .paymentDetail p {
-  font-size: 16px;
+  margin: 6px 0;
+  font-size: 15px;
   color: #333;
-  margin: 10px 0;
 }
 
 .payButton {
   width: 100%;
-  margin-top: 100px;
   background-color: #0064ff;
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 16px 0;
-  font-size: 18px;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 17px;
   font-weight: 600;
   cursor: pointer;
+  transition: 0.25s ease;
 }
 
 .payButton:hover {
-  background-color: #0051d3;
+  background-color: #004fcc;
+}
+
+.payButton:disabled {
+  background-color: #9bb8f2;
+  cursor: not-allowed;
 }
 
 .loading {
   text-align: center;
   margin-top: 100px;
   font-size: 18px;
-  color: #555;
+  color: #777;
 }

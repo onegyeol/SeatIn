@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "../styles/home.module.css";
 import Navbar from "../components/Navbar";  
 
@@ -9,6 +9,7 @@ const banners = ["/images/banner1.png", "/images/banner2.png", "/images/banner3.
 const categories = ["전체", "K리그", "KBO", "KBL", "프리미어리그"];
 
 export default function HomePage() {
+  const router = useRouter();
   const [currentBanner, setCurrentBanner] = useState(0);
   const [activeCategory, setActiveCategory] = useState("전체");
   const [matches, setMatches] = useState([]);
@@ -26,6 +27,11 @@ export default function HomePage() {
 
   const nextBanner = () => setCurrentBanner((prev) => (prev + 1) % banners.length);
   const prevBanner = () => setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     setCurrentPage(1);
@@ -73,7 +79,7 @@ export default function HomePage() {
         <div className={styles["match-grid"]}>
           {currentMatches.length > 0 ? (
             currentMatches.map((match) => (
-              <div key={match.id} className={styles["match-card"]}>
+              <div key={match.id} className={styles["match-card"]} onClick={() => router.push(`/pay?matchId=${match.id}`)} style={{ cursor: "pointer" }}>
 
                 {/* ✅ 로고 중앙 배치 */}
                 <div className={styles["match-logos-center"]}>
@@ -114,21 +120,35 @@ export default function HomePage() {
           )}
         </div>
         {/* 페이지네이션 */}
-        {totalPages > 1 && (
-          <div className={styles["pagination"]}>
+        <div className={styles.pagination}>
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={styles.pageBtn}
+            >
+              ◀
+            </button>
+
             {Array.from({ length: totalPages }, (_, i) => (
               <button
                 key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`${styles["page-btn"]} ${
-                  currentPage === i + 1 ? styles.active : ""
+                onClick={() => handlePageChange(i + 1)}
+                className={`${styles.pageBtn} ${
+                  currentPage === i + 1 ? styles.pageBtnActive : ""
                 }`}
               >
                 {i + 1}
               </button>
             ))}
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={styles.pageBtn}
+            >
+              ▶
+            </button>
           </div>
-        )}
       </section>
 
 

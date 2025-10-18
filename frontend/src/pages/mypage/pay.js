@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import MyPageSidebar from "../../components/MypageSidebar";
-import styles from "../../styles/MyPayPage.module.css"; 
+import styles from "../../styles/MyPayPage.module.css";
 
 export default function PayPage() {
   const [payments, setPayments] = useState([]);
@@ -9,16 +9,23 @@ export default function PayPage() {
   const ITEMS_PER_PAGE = 4;
 
   useEffect(() => {
-    const data = Array.from({ length: 12 }, (_, i) => ({
-      id: i + 1,
-      home_logo: "/images/kcc.png",
-      away_logo: "/images/samsung.png",
-      match_title: `부산 KCC vs 서울 삼성 ${i + 1}`,
-      stadium: "잠실 실내 체육관",
-      amount: 150000,
-      method: "신용 카드 결제",
-    }));
-    setPayments(data);
+    const fetchPayments = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/api/users/payments/", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access")}`, 
+          },
+        });
+        if (!res.ok) throw new Error("결제 내역을 불러오지 못했습니다.");
+        const data = await res.json();
+        setPayments(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchPayments();
   }, []);
 
   const totalPages = Math.ceil(payments.length / ITEMS_PER_PAGE);
@@ -50,21 +57,31 @@ export default function PayPage() {
               currentPayments.map((pay) => (
                 <div key={pay.id} className={styles.card}>
                   <div className={styles.logoRow}>
-                    <img src={pay.home_logo} alt="홈팀 로고" />
-                    <span style={{ fontFamily: "NanumSquareNeo-Bold", fontSize: "18px", color: "#222" }}>
+                    <img src={pay.poster1} alt="홈팀 로고" />
+                    <span
+                      style={{
+                        fontFamily: "NanumSquareNeo-Bold",
+                        fontSize: "18px",
+                        color: "#222",
+                      }}
+                    >
                       VS
                     </span>
-                    <img src={pay.away_logo} alt="원정팀 로고" />
+                    <img src={pay.poster2} alt="원정팀 로고" />
                   </div>
 
                   <p className={styles.matchTitle}>{pay.match_title}</p>
-                  <p className={styles.stadium}>{pay.stadium}</p>
                   <p className={styles.amount}>₩{pay.amount.toLocaleString()}</p>
                   <p className={styles.method}>{pay.method}</p>
+                  <p className={styles.date}>
+                    {new Date(pay.payment_time).toLocaleString()}
+                  </p>
                 </div>
               ))
             ) : (
-              <p style={{ color: "#6b7280", textAlign: "center" }}>결제 내역이 없습니다.</p>
+              <p style={{ color: "#6b7280", textAlign: "center" }}>
+                결제 내역이 없습니다.
+              </p>
             )}
           </div>
 

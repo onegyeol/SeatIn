@@ -8,7 +8,6 @@ export default function MyPageSidebar() {
         top: 0,
         left: 0,
         left: "20%",
-        height: "70%",   
         width: "260px",  
         borderRadius: 20,     
         backgroundColor: "#283577", 
@@ -43,6 +42,7 @@ export default function MyPageSidebar() {
             padding: "10px 16px",
             cursor: "pointer",
             fontSize: "18px",
+            fontFamily: "NanumSquareNeo",
           }}
         >
           정보 수정

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 import { useRouter } from "next/router";
 import styles from "../styles/Pay.module.css";
+import Navbar from "../components/Navbar";  
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function PaymentPage() {
         amount,
         orderId,
         orderName: match.title,
-        successUrl: "http://localhost:3000/pay_success",
+        successUrl: `http://localhost:3000/pay_success?matchId=${match.id}`,
         failUrl: "http://localhost:3000/pay_fail",
       });
     } catch (e) {
@@ -47,45 +48,59 @@ export default function PaymentPage() {
   if (!match) return <div className={styles.loading}>경기 정보를 불러오는 중...</div>;
 
   return (
-    <div className={styles.page}>
-      <div className={styles.content}>
-        <section className={styles.matchSection}>
-          <div className={styles["match-logos-center"]}>
-            <img
-              src={match.poster1_url || `http://127.0.0.1:8000${match.poster1}`}
-              alt="팀 로고"
-              className={styles["team-logo"]}
-            />
-            <span className={styles["vs-text"]}>VS</span>
-            <img
-              src={match.poster2_url || `http://127.0.0.1:8000${match.poster2}`}
-              alt="팀 로고"
-              className={styles["team-logo"]}
-            />
-          </div>
-          <div className={styles.matchInfo}>
-            <h1 className={styles.matchTitle}>{match.title}</h1>
-            <p className={styles.matchDate}>{new Date(match.date).toLocaleString()}</p>
-            <p className={styles.matchLocation}> {match.location}</p>
-            <p className={styles.matchCategory}>카테고리: {match.category}</p>
-          </div>
-        </section>
+    <>
+    <Navbar/>
+      <div className={styles.page}>
+        <div className={styles.content}>
+          <section className={styles.matchSection}>
+            <div className={styles["match-logos-center"]}>
+              <img
+                src={match.poster1_url || `http://127.0.0.1:8000${match.poster1}`}
+                alt="팀 로고"
+                className={styles["team-logo"]}
+              />
+              <span className={styles["vs-text"]}>VS</span>
+              <img
+                src={match.poster2_url || `http://127.0.0.1:8000${match.poster2}`}
+                alt="팀 로고"
+                className={styles["team-logo"]}
+              />
+            </div>
+            <div className={styles.matchInfo}>
+              <h1 className={styles.matchTitle}>{match.title}</h1>
+              <p className={styles.matchDate}>{new Date(match.date).toLocaleString("ko-KR", {
+                  timeZone: "Asia/Seoul",
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })}
+                </p>
+              <p className={styles.matchLocation}> {match.location}</p>
+              <p className={styles.matchCategory}>카테고리: {match.category}</p>
+            </div>
+          </section>
 
-        <section className={styles.paymentSection}>
-          <h2>결제 정보</h2>
-          <div className={styles.paymentDetail}>
-            <p><b>예매 금액:</b> 15,000원</p>
-          </div>
+          <section className={styles.paymentSection}>
+            <h2>결제 정보</h2>
+            <div className={styles.paymentDetail}>
+              <p><b>좌석 정보:</b> R석 1층 A구역 12열 8번</p>
+              <p><b>예매 인원:</b> 1명</p>
+              <p><b>예매 금액:</b> 15,000원</p>
+            </div>
 
-          <button
-            onClick={handlePayment}
-            disabled={loading}
-            className={styles.payButton}
-          >
-            {loading ? "결제 진행 중..." : "결제하기"}
-          </button>
-        </section>
+            <button
+              onClick={handlePayment}
+              disabled={loading}
+              className={styles.payButton}
+            >
+              {loading ? "결제 진행 중..." : "결제하기"}
+            </button>
+          </section>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

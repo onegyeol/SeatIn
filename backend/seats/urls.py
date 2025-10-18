@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import SeatView
+from .views import seat_list
 
 urlpatterns = [
-    path('/', SeatView.as_view(), name='seat-view'),
+    path('', seat_list, name='seat-list'),
 ]

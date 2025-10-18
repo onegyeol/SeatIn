@@ -5,6 +5,7 @@ class Seat(models.Model):
     x = models.FloatField()
     y = models.FloatField()
     z = models.FloatField()
+    section = models.CharField(max_length=2, null=True, blank=True)
 
     def __str__(self):
         return self.seat_id

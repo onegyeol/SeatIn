@@ -9,7 +9,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")), 
     path('api/match/', include('match.urls')),
     path('api/payments/', include('payments.urls')),
-    path('api/seats', include('seats.urls')),
+    path('api/seats/', include('seats.urls')),
 ]
 
 if settings.DEBUG:
